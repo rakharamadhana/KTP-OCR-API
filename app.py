@@ -6,6 +6,9 @@ import json
 
 app = Flask(__name__)
 
+# Define the maximum file size (in bytes)
+MAX_FILE_SIZE = 3 * 1024 * 1024
+
 
 @app.route('/ocr', methods=['POST'])
 def ocr():
@@ -16,6 +19,10 @@ def ocr():
     if file.filename == '':
         return jsonify({'error': 'No selected file'}), 400
 
+    # Check file size
+    if file.content_length > MAX_FILE_SIZE:
+        return jsonify({'error': f'File exceeds maximum size of {MAX_FILE_SIZE // (1024 * 1024)} MB'}), 400
+
     img = cv2.imdecode(np.frombuffer(file.read(), np.uint8), cv2.IMREAD_COLOR)
     if img is None:
         return jsonify({'error': 'Unable to read the image'}), 400
@@ -24,6 +31,7 @@ def ocr():
     ordered_dict = ocr.result.to_ordered_dict()  # Get the ordered dict
     response_json = json.dumps(ordered_dict, indent=4)  # Convert to JSON string
     return response_json  # Return the JSON string directly
+
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
