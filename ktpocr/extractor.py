@@ -63,12 +63,20 @@ class KTPOCR(object):
                 continue
 
             if 'Darah' in word:
-                self.result.jenis_kelamin = re.search("(LAKI-LAKI|LAKI|LELAKI|PEREMPUAN)", word)[0]
-                word = word.split(':')
+                # Handle the blood type extraction
+                word_parts = word.split(':')
                 try:
-                    self.result.golongan_darah = re.search("(O|A|B|AB)", word[-1])[0]
-                except:
+                    self.result.golongan_darah = re.search("(O|A|B|AB)", word_parts[-1])[0]
+                except IndexError:
                     self.result.golongan_darah = '-'
+
+            if 'Jenis kelamin' in word:
+                # Handle the gender extraction
+                gender_value = re.search("(LAKI-LAKI|LAKI|LELAKI|PEREMPUAN)", word)
+                if gender_value:
+                    self.result.jenis_kelamin = gender_value.group(0)  # Get the matched string
+                else:
+                    self.result.jenis_kelamin = None  # Handle invalid case if necessary
 
             if 'Alamat' in word:
                 self.result.alamat = self.word_to_number_converter(word).replace("Alamat ", "")
@@ -96,7 +104,15 @@ class KTPOCR(object):
             if 'Agama' in word:
                 self.result.agama = word.replace('Agama', "").strip()
             if 'Perkawinan' in word:
-                self.result.status_perkawinan = word.split(':')[1]
+                # Split the word and get the value
+                status_value = word.split(':')[1].strip()  # Use strip() to remove any leading/trailing spaces
+
+                # Check if the value is valid
+                if status_value in ["BELUM KAWIN", "KAWIN"]:
+                    self.result.status_perkawinan = status_value
+                else:
+                    # Handle invalid value if needed, e.g., set to None or log a message
+                    self.result.status_perkawinan = None  # or some default value
             if "RTRW" in word:
                 word = word.replace("RTRW", '')
                 parts = word.split('/')
