@@ -64,20 +64,24 @@ class KTPOCR(object):
                 continue
 
             if 'Darah' in word:
-                # Handle the blood type extraction
-                word_parts = word.split(':')
-                try:
-                    self.result.golongan_darah = re.search("(O|A|B|AB)", word_parts[-1])[0]
-                except IndexError:
+                match = re.search("(LAKI-LAKI|LAKI|LELAKI|PEREMPUAN)", word)
+                if match:  # Check if a match was found
+                    self.result.jenis_kelamin = match[0]
+                else:
+                    self.result.jenis_kelamin = "Unknown"  # Default value
+
+                word_parts = word.split(':') if word else []  # Ensure word is not None
+                if len(word_parts) > 1:
+                    self.result.golongan_darah = re.search("(O|A|B|AB)", word_parts[-1]) or '-'
+                else:
                     self.result.golongan_darah = '-'
 
-            if 'Jenis kelamin' in word:
-                # Handle the gender extraction
-                gender_value = re.search("(LAKI-LAKI|LAKI|LELAKI|PEREMPUAN)", word)
-                if gender_value:
-                    self.result.jenis_kelamin = gender_value.group(0)  # Get the matched string
+            if 'jenis kelamin' in word:
+                match = re.search("(LAKI-LAKI|LAKI|LELAKI|PEREMPUAN)", word)
+                if match:  # Ensure a match was found
+                    self.result.jenis_kelamin = match[0]
                 else:
-                    self.result.jenis_kelamin = None  # Handle invalid case if necessary
+                    self.result.jenis_kelamin = "Unknown"  # Handle no match
 
             if 'Alamat' in word:
                 self.result.alamat = self.word_to_number_converter(word).replace("Alamat ", "")
@@ -104,13 +108,12 @@ class KTPOCR(object):
                 self.result.pekerjaan = ' '.join(pekerjaan).replace('Pekerjaan', '').strip()
 
             if 'Agama' in word:
-                extracted_religion = word.replace('Agama', "").strip()
-
-                # Check if the extracted religion is valid
-                if extracted_religion in valid_religions:
-                    self.result.agama = extracted_religion
+                agama_value = word.replace('Agama', "").strip() if word else ''
+                if agama_value in ["ISLAM", "KATOLIK", "PROTESTAN", "HINDU", "BUDHA"]:
+                    self.result.agama = agama_value
                 else:
-                    self.result.agama = None  # or handle the invalid case as needed
+                    self.result.agama = "Unknown"  # Handle other cases
+
             if 'Perkawinan' in word:
                 # Split the word and get the value
                 status_value = word.split(':')[1].strip()  # Use strip() to remove any leading/trailing spaces
