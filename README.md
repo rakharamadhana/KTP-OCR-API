@@ -24,7 +24,7 @@ If you are using Windows, you can install Tesseract via Chocolatey:
 ```console
 $ choco install tesseract
 ```
-3. After installation, you may need to manually add the Indonesian language file. You can download it from <a href="https://github.com/tesseract-ocr/tessdata">Tesseract Language Data</a> and place it in the Tesseract installation directory under <b>tessdata</b>.
+3. After installation, you may need to manually add the Indonesian language file. You can download it from <a href="https://github.com/tesseract-ocr/tessdata">Tesseract Language Data</a> and place it in the Tesseract installation directory under ```tessdata```.
 
 ---
 
