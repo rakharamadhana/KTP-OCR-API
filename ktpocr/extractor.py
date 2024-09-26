@@ -69,6 +69,7 @@ class KTPOCR(object):
                     self.result.golongan_darah = re.search("(O|A|B|AB)", word[-1])[0]
                 except:
                     self.result.golongan_darah = '-'
+
             if 'Alamat' in word:
                 self.result.alamat = self.word_to_number_converter(word).replace("Alamat ", "")
             if 'NO.' in word:
@@ -82,6 +83,7 @@ class KTPOCR(object):
                     if not 'desa' in wr.lower():
                         desa.append(wr)
                 self.result.kelurahan_atau_desa = ''.join(desa)
+
             if 'Kewarganegaraan' in word:
                 self.result.kewarganegaraan = word.split(':')[1].strip()
             if 'Pekerjaan' in word:
@@ -97,8 +99,14 @@ class KTPOCR(object):
                 self.result.status_perkawinan = word.split(':')[1]
             if "RTRW" in word:
                 word = word.replace("RTRW", '')
-                self.result.rt = word.split('/')[0].strip()
-                self.result.rw = word.split('/')[1].strip()
+                parts = word.split('/')
+                if len(parts) > 1:  # Ensure there are at least 2 parts
+                    self.result.rt = parts[0].strip()
+                    self.result.rw = parts[1].strip()
+                else:
+                    # Handle the case where there is no '/' or insufficient parts
+                    self.result.rt = parts[0].strip() if parts else '-'
+                    self.result.rw = '-'
 
     def master_process(self):
         raw_text = self.process(self.image)
