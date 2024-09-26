@@ -1,7 +1,6 @@
 from collections import OrderedDict
 import json
 
-
 class KTPInformation(object):
     def __init__(self):
         self.nik = ""
@@ -42,5 +41,4 @@ class KTPInformation(object):
         ])
 
     def to_json(self):
-        return self.to_ordered_dict()  # Return the ordered dict instead of a JSON string
-
+        return json.dumps(self.to_ordered_dict(), indent=4)
