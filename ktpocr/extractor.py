@@ -65,8 +65,17 @@ class KTPOCR(object):
 
             if "Tempat" in word:
                 word = word.split(':')
-                self.result.tanggal_lahir = re.search("([0-9]{2}\-[0-9]{2}\-[0-9]{4})", word[-1])[0]
-                self.result.tempat_lahir = word[-1].replace(self.result.tanggal_lahir, '')
+
+                # Extract the date of birth using regex
+                date_match = re.search(r"([0-9]{2}\-[0-9]{2}\-[0-9]{4})", word[-1])
+                if date_match:
+                    self.result.tanggal_lahir = date_match[0]
+                    # Remove the found date from the string to isolate tempat lahir
+                    tempat_lahir_raw = word[-1].replace(self.result.tanggal_lahir, '')
+
+                    # Use regex to keep only letters and spaces
+                    self.result.tempat_lahir = re.sub(r'[^a-zA-Z\s]', '',
+                                                      tempat_lahir_raw).strip()  # Clean and strip spaces
                 continue
 
             if 'Darah' in word:
