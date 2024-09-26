@@ -90,7 +90,7 @@ class KTPOCR(object):
                 # Join all collected parts for the final province name
                 self.result.provinsi = ' '.join(provinsi_parts).strip()
 
-            if "KOTA" in word or "KABUPATEN" in word:
+            if "KOTA" in word:
                 # Extract the part after "KOTA" and clean it
                 kota_part = word.split(':')[-1].strip() if ':' in word else word.replace("KOTA", "").strip()
 
