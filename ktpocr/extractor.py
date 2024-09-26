@@ -124,7 +124,7 @@ class KTPOCR(object):
                 if detected_religion:
                     self.result.agama = detected_religion
                 else:
-                    self.result.agama = "Unknown"  # Handle cases where no known religion is found
+                    self.result.agama = agama_value  # Handle cases where no known religion is found
 
             if 'Perkawinan' in word:
                 # Split the word and get the value
