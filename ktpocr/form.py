@@ -42,4 +42,5 @@ class KTPInformation(object):
         ])
 
     def to_json(self):
-        return json.dumps(self.to_ordered_dict(), indent=4)
+        return self.to_ordered_dict()  # Return the ordered dict instead of a JSON string
+
