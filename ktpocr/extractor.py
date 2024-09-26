@@ -61,24 +61,26 @@ class KTPOCR(object):
                 continue
 
             if "Nama" in word:
+                # Split the word at the colon and get the part after "Nama"
+                name_part = word.split(':')[-1].strip().replace('Nama', '')
+
                 # Initialize a list to hold name parts
-                name_parts = []
+                name_parts = [name_part]
 
-                # Start extracting after the colon
-                name_start = word.split(':')[-1].strip().replace('Nama', '')  # Get the part after 'Nama'
-                if name_start:
-                    name_parts.append(name_start)  # Add the initial part to the list
-
-                # Keep reading lines until we encounter a line that starts a new section
+                # Continue to the next lines until we find a line with identifiable fields
                 for next_word in extracted_result.split("\n"):
-                    # Check if next_word is part of the name (i.e., it doesn't contain identifiers for other fields)
-                    if not any(keyword in next_word for keyword in
-                               ['NIK', 'Tempat', 'Jenis kelamin', 'Gol. Darah', 'Alamat', 'Kecamatan', 'Agama',
-                                'Status', 'Pekerjaan', 'Kewarganegaraan', 'Berlaku']):
-                        # If it doesn't contain any of the keywords, it might be part of the name
-                        name_parts.append(next_word.strip())
-                    else:
-                        break  # Stop if we hit a new field
+                    # Break if we encounter a line that begins with known keywords for other fields
+                    if any(keyword in next_word for keyword in
+                           ['NIK', 'Tempat', 'Jenis kelamin', 'Gol. Darah', 'Alamat', 'Kecamatan', 'Agama', 'Status',
+                            'Pekerjaan', 'Kewarganegaraan', 'Berlaku']):
+                        break
+
+                    # If we haven't broken out, check if it's part of the name (the first line after "Nama :")
+                    if next_word.strip() and not next_word.startswith(
+                            tuple(['NIK', 'Tempat', 'Jenis kelamin', 'Gol. Darah', 'Alamat', 'Kecamatan', 'Agama',
+                                   'Status', 'Pekerjaan', 'Kewarganegaraan', 'Berlaku'])):
+                        name_parts.append(next_word.strip())  # Add the name part if it doesn't belong to another field
+                        break  # We only want the first subsequent line for the name
 
                 # Join all collected parts for the final name
                 self.result.nama = ' '.join(name_parts).strip()  # Combine the parts into a single name string
