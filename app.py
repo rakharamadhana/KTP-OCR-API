@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 import cv2
 import numpy as np
 from ktpocr import KTPOCR
@@ -9,6 +9,9 @@ app = Flask(__name__)
 # Define the maximum file size (in bytes)
 MAX_FILE_SIZE = 3 * 1024 * 1024
 
+@app.route('/')
+def welcome():
+    return render_template('welcome.html')  # Render the welcome.html template
 @app.route('/ocr', methods=['POST'])
 def ocr():
     if 'file' not in request.files:
@@ -38,4 +41,4 @@ def ocr():
         return jsonify({'error': str(e)}), 500  # Return the error message as JSON
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=8000)
+    app.run(debug=True, host='0.0.0.0', port=5000)
