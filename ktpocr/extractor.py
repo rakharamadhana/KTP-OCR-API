@@ -169,8 +169,8 @@ class KTPOCR(object):
                     self.result.rw = parts[1].strip()
                 else:
                     # Handle the case where there is no '/' or insufficient parts
-                    self.result.rt = parts[0].strip() if parts else '-'
-                    self.result.rw = '-'
+                    self.result.rt = word
+                    self.result.rw = word
 
     def master_process(self):
         raw_text = self.process(self.image)
