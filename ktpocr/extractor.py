@@ -262,9 +262,11 @@ class KTPOCR(object):
                     # Handle invalid value if needed, e.g., set to None or log a message
                     self.result.status_perkawinan = status_value  # or some default value
 
-            if "RI/RW" in word or "RT/RW" in word:  # Check for either "RI/RW" or "RT/RW"
+            if "RI/RW" in word or "RT/RW" in word or "RTRW" in word:  # Check for either "RI/RW" or "RT/RW"
                 if "RI/RW" in word:
                     word = word.replace("RI/RW", '')  # Remove the "RI/RW" prefix
+                elif "RTRW" in word:
+                    word = word.replace("RTRW", '')  # Remove the "RI/RW" prefix
                 else:
                     word = word.replace("RT/RW", '')  # Remove the "RT/RW" prefix if detected
 
