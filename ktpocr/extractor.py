@@ -118,7 +118,7 @@ class KTPOCR(object):
                 elif "ISLAM" in agama_value:  # Check for variations of ISLAM
                     self.result.agama = "ISLAM"
                 else:
-                    self.result.agama = "Unknown"  # Handle other cases
+                    self.result.agama = agama_value  # Handle other cases
 
             if 'Perkawinan' in word:
                 # Split the word and get the value
