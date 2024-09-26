@@ -36,7 +36,7 @@ $ cd KTP-OCR-API
 $ pip install -r requirements.txt
 $ python app.py
 ```
-Then access through your Flask server in  <a href="localhost:5000">localhost:5000</a>
+Then access through your Flask server in  <a href="http://localhost:5000">localhost:5000</a>
 
 ---
 ## How to use
@@ -72,4 +72,6 @@ Make a request with <a href="https://www.postman.com/downloads/">Postman</a> (or
 
 ---
 
-<p align="center"> This repository is a modified version from <a href="https://github.com/YukaLangbuana/KTP-OCR">YukaLangbuana</a> to made it possible as an API.</p>
+## Credit
+
+This project was possible from the contributions of the original creator <a href="https://github.com/YukaLangbuana/KTP-OCR">YukaLangbuana's KTP-OCR</a>
