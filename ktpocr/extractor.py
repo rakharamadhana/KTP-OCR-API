@@ -7,6 +7,7 @@ from ktpocr.form import KTPInformation
 
 valid_religions = ['ISLAM', 'KRISTEN', 'KATOLIK', 'HINDU', 'BUDHA', 'KONGHUCU']
 
+
 class KTPOCR(object):
     def __init__(self, image):
         # Directly assign the image passed as a NumPy array
@@ -111,7 +112,7 @@ class KTPOCR(object):
 
                     # If the next line starts with a known field or a keyword, stop the loop
                     if any(keyword in next_line for keyword in
-                           ["NIK", "Nama"]):
+                           ["NIK", "Nama", ":"]):
                         break
 
                     # If it's a part of the city name, add it to kota_parts
@@ -225,7 +226,8 @@ class KTPOCR(object):
                     cleaned_word = wr.lstrip(': ,')  # Strip leading ':', ' ', and ','
                     if '-' not in cleaned_word:  # Ensure there's no '-' in the cleaned word
                         pekerjaan.append(cleaned_word.strip())  # Append the stripped word to the list
-                self.result.pekerjaan = ' '.join(pekerjaan).replace('Pekerjaan','').strip()  # Join and strip extra spaces
+                self.result.pekerjaan = ' '.join(pekerjaan).replace('Pekerjaan',
+                                                                    '').strip()  # Join and strip extra spaces
             if 'Agama' in word:
                 # Remove the prefix 'Agama' and strip any extra spaces
                 agama_value = word.replace('Agama', "").strip() if word else ''
