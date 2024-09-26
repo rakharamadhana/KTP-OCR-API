@@ -111,18 +111,23 @@ class KTPOCR(object):
                         continue
 
                     # If the next line starts with a known field or a keyword, stop the loop
-                    if any(keyword in next_line for keyword in
-                           ["NIK", "Nama", ":"]):
+                    if any(keyword in next_line for keyword in ["NIK", "Nama", ":"]):
                         break
 
-                    # If it's a part of the city name, add it to kota_parts
-                    kota_parts.append(next_line)
+                    # Check if the next line contains relevant parts for the city name
+                    # Modify the condition to extract only valid city names
+                    if "KOTA" not in next_line and next_line:
+                        # Remove any unwanted words or characters (like "ISLAM")
+                        cleaned_next_line = ' '.join([word for word in next_line.split() if word not in ["ISLAM"]])
+                        kota_parts.append(cleaned_next_line)
 
                     # Move to the next line
                     next_line_index += 1
 
-                # Join all collected parts for the final city name
+                # Join all collected parts for the final city name and ensure it's clean
                 self.result.kota_kab = ' '.join(kota_parts).strip()
+                # Further refine the result to only return the last two words
+                self.result.kota_kab = ' '.join(self.result.kota_kab.split()[-2:])
 
             if "NIK" in word:
                 word = word.split(':')
