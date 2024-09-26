@@ -55,6 +55,74 @@ class KTPOCR(object):
 
     def extract(self, extracted_result):
         for word in extracted_result.split("\n"):
+            if "PROVINSI" in word:
+                # Extract the part after "PROVINSI" and clean it
+                provinsi_part = word.split(':')[-1].strip() if ':' in word else word.replace("PROVINSI", "").strip()
+
+                # Initialize a list to hold the full province name parts
+                provinsi_parts = [provinsi_part]
+
+                # Get the index of the current word to continue processing from the next line
+                current_index = extracted_result.split("\n").index(word)
+
+                # Loop to collect additional province parts until hitting an empty line or known field
+                next_line_index = current_index + 1
+                while next_line_index < len(extracted_result.split("\n")):
+                    next_line = extracted_result.split("\n")[next_line_index].strip()
+
+                    # If the next line is empty, continue to the next line
+                    if not next_line:
+                        next_line_index += 1
+                        continue
+
+                    # If the next line starts with a known field or a keyword, stop the loop
+                    if any(keyword in next_line for keyword in
+                           ["KOTA", "NIK"]):
+                        break
+
+                    # If it's a part of the province name, add it to provinsi_parts
+                    provinsi_parts.append(next_line)
+
+                    # Move to the next line
+                    next_line_index += 1
+
+                # Join all collected parts for the final province name
+                self.result.provinsi = ' '.join(provinsi_parts).strip()
+
+            if "KOTA" in word:
+                # Extract the part after "KOTA" and clean it
+                kota_part = word.split(':')[-1].strip() if ':' in word else word.replace("KOTA", "").strip()
+
+                # Initialize a list to hold the full city name parts
+                kota_parts = [kota_part]
+
+                # Get the index of the current word to continue processing from the next line
+                current_index = extracted_result.split("\n").index(word)
+
+                # Loop to collect additional city parts until hitting an empty line or known field
+                next_line_index = current_index + 1
+                while next_line_index < len(extracted_result.split("\n")):
+                    next_line = extracted_result.split("\n")[next_line_index].strip()
+
+                    # If the next line is empty, continue to the next line
+                    if not next_line:
+                        next_line_index += 1
+                        continue
+
+                    # If the next line starts with a known field or a keyword, stop the loop
+                    if any(keyword in next_line for keyword in
+                           ["NIK", "Nama"]):
+                        break
+
+                    # If it's a part of the city name, add it to kota_parts
+                    kota_parts.append(next_line)
+
+                    # Move to the next line
+                    next_line_index += 1
+
+                # Join all collected parts for the final city name
+                self.result.kota = ' '.join(kota_parts).strip()
+
             if "NIK" in word:
                 word = word.split(':')
                 self.result.nik = self.nik_extract(word[-1].replace(" ", ""))

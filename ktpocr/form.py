@@ -10,6 +10,8 @@ class KTPInformation(object):
         self.tanggal_lahir = ""
         self.jenis_kelamin = ""
         self.golongan_darah = ""
+        self.provinsi = ""
+        self.kota = ""
         self.alamat = ""
         self.rt = ""
         self.rw = ""
