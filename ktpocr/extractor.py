@@ -148,12 +148,19 @@ class KTPOCR(object):
                 # Split the word and get the value
                 status_value = word.split(':')[1].strip()  # Use strip() to remove any leading/trailing spaces
 
-                # Check if the value is valid
+                # Normalize the status_value to handle variations
+                if re.search(r'BLUM|BELUM', status_value):  # Check for variations of 'BELUM'
+                    status_value = "BELUM KAWIN"  # Normalize to 'BELUM KAWIN'
+                elif "KAWIN" in status_value:
+                    status_value = "KAWIN"  # Normalize to 'KAWIN'
+
+                # Check if the normalized value is valid
                 if status_value in ["BELUM KAWIN", "KAWIN"]:
                     self.result.status_perkawinan = status_value
                 else:
                     # Handle invalid value if needed, e.g., set to None or log a message
-                    self.result.status_perkawinan = None  # or some default value
+                    self.result.status_perkawinan = status_value  # or some default value
+
             if "RTRW" in word:
                 word = word.replace("RTRW", '')
                 parts = word.split('/')
