@@ -8,8 +8,7 @@ import os
 app = Flask(__name__)
 
 # Set the path to the Tesseract executable if needed
-pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
-
+pytesseract.pytesseract.tesseract_cmd = '/usr/bin/tesseract'
 
 @app.route('/ocr', methods=['POST'])
 def ocr():
