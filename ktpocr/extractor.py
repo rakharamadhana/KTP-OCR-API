@@ -109,8 +109,14 @@ class KTPOCR(object):
 
             if 'Agama' in word:
                 agama_value = word.replace('Agama', "").strip() if word else ''
+
+                # Normalize the agama_value by stripping spaces and checking for known religions
+                agama_value = agama_value.split()[0]  # Take only the first word
+
                 if agama_value in ["ISLAM", "KATOLIK", "PROTESTAN", "HINDU", "BUDHA"]:
                     self.result.agama = agama_value
+                elif "ISLAM" in agama_value:  # Check for variations of ISLAM
+                    self.result.agama = "ISLAM"
                 else:
                     self.result.agama = "Unknown"  # Handle other cases
 
