@@ -32,7 +32,7 @@ class KTPInformation(object):
             ("jenis_kelamin", self.jenis_kelamin),
             ("golongan_darah", self.golongan_darah),
             ("provinsi", self.provinsi),
-            ("kota", self.kota),
+            ("kota_kab", self.kota_kab),
             ("alamat", self.alamat),
             ("rt", self.rt),
             ("rw", self.rw),
