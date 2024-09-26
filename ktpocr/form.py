@@ -19,7 +19,7 @@ class KTPInformation(object):
         self.status_perkawinan = ""
         self.pekerjaan = ""
         self.kewarganegaraan = ""
-        self.berlaku_hingga = "SEMUR HIDUP"
+        self.berlaku_hingga = "SEUMUR HIDUP"
 
     def to_ordered_dict(self):
         return OrderedDict([

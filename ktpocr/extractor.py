@@ -163,16 +163,25 @@ class KTPOCR(object):
                     # Handle invalid value if needed, e.g., set to None or log a message
                     self.result.status_perkawinan = status_value  # or some default value
 
-            if "RTRW" in word:
-                word = word.replace("RTRW", '')
-                parts = word.split('/')
-                if len(parts) > 1:  # Ensure there are at least 2 parts
-                    self.result.rt = parts[0].strip()
-                    self.result.rw = parts[1].strip()
+            if "RI/RW" in word or "RT/RW" in word:  # Check for either "RI/RW" or "RT/RW"
+                if "RI/RW" in word:
+                    word = word.replace("RI/RW", '')  # Remove the "RI/RW" prefix
                 else:
-                    # Handle the case where there is no '/' or insufficient parts
-                    self.result.rt = word
-                    self.result.rw = word
+                    word = word.replace("RT/RW", '')  # Remove the "RT/RW" prefix if detected
+
+                parts = word.split(':')  # Split the line at the colon
+                if len(parts) > 1:  # Ensure there is something after the colon
+                    rt_rw = parts[1].strip()  # Get the part after the colon
+                    rt_rw_parts = rt_rw.split('/')  # Split by '/'
+                    if len(rt_rw_parts) > 1:  # Ensure there are at least 2 parts
+                        self.result.rt = rt_rw_parts[0].strip()  # Assign the first part as RT
+                        self.result.rw = rt_rw_parts[1].strip()  # Assign the second part as RW
+                    else:
+                        self.result.rt = rt_rw.strip()  # If no '/', assign the whole part to RT
+                        self.result.rw = '-'  # Assign '-' if RW is missing
+                else:
+                    self.result.rt = '-'  # Assign '-' if no value is found
+                    self.result.rw = '-'  # Assign '-' if no value is found
 
     def master_process(self):
         raw_text = self.process(self.image)
