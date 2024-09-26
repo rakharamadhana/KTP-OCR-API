@@ -11,7 +11,7 @@ class KTPInformation(object):
         self.jenis_kelamin = ""
         self.golongan_darah = ""
         self.provinsi = ""
-        self.kota = ""
+        self.kota_kab = ""
         self.alamat = ""
         self.rt = ""
         self.rw = ""
@@ -31,6 +31,8 @@ class KTPInformation(object):
             ("tanggal_lahir", self.tanggal_lahir),
             ("jenis_kelamin", self.jenis_kelamin),
             ("golongan_darah", self.golongan_darah),
+            ("provinsi", self.provinsi),
+            ("kota", self.kota),
             ("alamat", self.alamat),
             ("rt", self.rt),
             ("rw", self.rw),

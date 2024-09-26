@@ -89,9 +89,9 @@ class KTPOCR(object):
                 # Join all collected parts for the final province name
                 self.result.provinsi = ' '.join(provinsi_parts).strip()
 
-            if "KOTA" in word:
+            if "KOTA" in word or "KABUPATEN" in word:
                 # Extract the part after "KOTA" and clean it
-                kota_part = word.split(':')[-1].strip() if ':' in word else word.replace("KOTA", "").strip()
+                kota_part = word.split(':')[-1].strip() if ':' in word else word.replace(["KOTA", "KABUPATEN"], "").strip()
 
                 # Initialize a list to hold the full city name parts
                 kota_parts = [kota_part]
@@ -121,7 +121,7 @@ class KTPOCR(object):
                     next_line_index += 1
 
                 # Join all collected parts for the final city name
-                self.result.kota = ' '.join(kota_parts).strip()
+                self.result.kota_kab = ' '.join(kota_parts).strip()
 
             if "NIK" in word:
                 word = word.split(':')
