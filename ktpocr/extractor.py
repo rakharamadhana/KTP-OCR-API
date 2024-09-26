@@ -5,6 +5,7 @@ import numpy as np
 import pytesseract
 from ktpocr.form import KTPInformation
 
+valid_religions = ['ISLAM', 'KRISTEN', 'KATOLIK', 'HINDU', 'BUDHA', 'KONGHUCU']
 
 class KTPOCR(object):
     def __init__(self, image):
@@ -101,8 +102,15 @@ class KTPOCR(object):
                     if not '-' in wr:
                         pekerjaan.append(wr)
                 self.result.pekerjaan = ' '.join(pekerjaan).replace('Pekerjaan', '').strip()
+
             if 'Agama' in word:
-                self.result.agama = word.replace('Agama', "").strip()
+                extracted_religion = word.replace('Agama', "").strip()
+
+                # Check if the extracted religion is valid
+                if extracted_religion in valid_religions:
+                    self.result.agama = extracted_religion
+                else:
+                    self.result.agama = None  # or handle the invalid case as needed
             if 'Perkawinan' in word:
                 # Split the word and get the value
                 status_value = word.split(':')[1].strip()  # Use strip() to remove any leading/trailing spaces
