@@ -91,7 +91,7 @@ class KTPOCR(object):
 
             if "KOTA" in word or "KABUPATEN" in word:
                 # Extract the part after "KOTA" and clean it
-                kota_part = word.split(':')[-1].strip() if ':' in word else word.replace(["KOTA", "KABUPATEN"], "").strip()
+                kota_part = word.split(':')[-1].strip() if ':' in word else word.replace(["KOTA"], "").strip()
 
                 # Initialize a list to hold the full city name parts
                 kota_parts = [kota_part]
