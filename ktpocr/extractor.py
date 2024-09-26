@@ -70,12 +70,29 @@ class KTPOCR(object):
                 # Get the index of the current word to continue processing from the next line
                 current_index = extracted_result.split("\n").index(word)
 
-                # Check the next line directly after the current line
-                next_line = extracted_result.split("\n")[current_index + 1].strip()
+                # Initialize a variable to track the next line
+                next_line_index = current_index + 1
 
-                # If the next line is not empty, add it to name_parts
-                if next_line:
+                # Loop to collect additional name parts until hitting an empty line or known field
+                while next_line_index < len(extracted_result.split("\n")):
+                    next_line = extracted_result.split("\n")[next_line_index].strip()
+
+                    # If the next line is empty, continue to the next line
+                    if not next_line:
+                        next_line_index += 1
+                        continue
+
+                    # If the next line starts with a known field or a keyword, stop the loop
+                    if any(keyword in next_line for keyword in
+                           ["Tempat","Tempat/Tgi Lahir", "Alamat", "Agama", "Status Perkawinan", "Kewarganegaraan",
+                            "Pekerjaan"]):
+                        break
+
+                    # If it's a part of the name, add it to name_parts
                     name_parts.append(next_line)
+
+                    # Move to the next line
+                    next_line_index += 1
 
                 # Join all collected parts for the final name
                 self.result.nama = ' '.join(name_parts).strip()  # Combine the parts into a single name string
