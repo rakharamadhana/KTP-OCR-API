@@ -113,4 +113,4 @@ class KTPOCR(object):
         self.extract(raw_text)
 
     def to_json(self):
-        return self.result.__dict__  # Return the dictionary directly
+        return self.result.to_json()  # Ensure you're calling the KTPInformation's to_json method
