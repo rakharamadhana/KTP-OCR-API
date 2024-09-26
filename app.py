@@ -12,6 +12,7 @@ MAX_FILE_SIZE = 3 * 1024 * 1024
 @app.route('/')
 def welcome():
     return render_template('welcome.html')  # Render the welcome.html template
+
 @app.route('/ocr', methods=['POST'])
 def ocr():
     if 'file' not in request.files:
