@@ -84,8 +84,7 @@ class KTPOCR(object):
 
                     # If the next line starts with a known field or a keyword, stop the loop
                     if any(keyword in next_line for keyword in
-                           ["Tempat","Tempat/Tgi Lahir", "Alamat", "Agama", "Status Perkawinan", "Kewarganegaraan",
-                            "Pekerjaan"]):
+                           ["Tempat", "Lahir", "Tempat/Tgi Lahir", ":", ","]):
                         break
 
                     # If it's a part of the name, add it to name_parts
