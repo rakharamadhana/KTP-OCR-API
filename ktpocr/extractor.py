@@ -108,17 +108,23 @@ class KTPOCR(object):
                 self.result.pekerjaan = ' '.join(pekerjaan).replace('Pekerjaan', '').strip()
 
             if 'Agama' in word:
+                # Remove the prefix 'Agama' and strip any extra spaces
                 agama_value = word.replace('Agama', "").strip() if word else ''
 
-                # Normalize the agama_value by stripping spaces and checking for known religions
-                agama_value = agama_value.split()[0]  # Take only the first word
+                # Define a list of known religions
+                known_religions = ["ISLAM", "KATOLIK", "PROTESTAN", "HINDU", "BUDHA"]
 
-                if agama_value in ["ISLAM", "KATOLIK", "PROTESTAN", "HINDU", "BUDHA"]:
-                    self.result.agama = agama_value
-                elif "ISLAM" in agama_value:  # Check for variations of ISLAM
-                    self.result.agama = "ISLAM"
+                # Normalize agama_value by checking for known religions
+                detected_religion = None
+                for religion in known_religions:
+                    if religion in agama_value:  # Check if the known religion is part of the detected value
+                        detected_religion = religion
+                        break
+
+                if detected_religion:
+                    self.result.agama = detected_religion
                 else:
-                    self.result.agama = agama_value  # Handle other cases
+                    self.result.agama = "Unknown"  # Handle cases where no known religion is found
 
             if 'Perkawinan' in word:
                 # Split the word and get the value
