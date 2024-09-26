@@ -21,7 +21,8 @@ def ocr():
         return jsonify({'error': 'Unable to read the image'}), 400
 
     ocr = KTPOCR(img)  # Create an instance of KTPOCR with the image
-    return jsonify(ocr.result.to_json())  # Use the ordered JSON
+    ordered_dict = ocr.result.to_ordered_dict()  # Get the ordered dict
+    return jsonify(ordered_dict)  # Return the ordered dictionary as JSON
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
