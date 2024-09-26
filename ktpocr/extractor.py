@@ -108,9 +108,11 @@ class KTPOCR(object):
                 wrd = word.split()
                 desa = []
                 for wr in wrd:
-                    if not 'desa' in wr.lower():
-                        desa.append(wr)
-                self.result.kelurahan_atau_desa = ''.join(desa)
+                    # Check if 'desa' is not in the word and strip leading unwanted characters
+                    cleaned_word = wr.lstrip(': ,')  # Strip leading ':', ' ', and ','
+                    if 'desa' not in cleaned_word.lower():  # Ensure 'desa' is not in the cleaned word
+                        desa.append(cleaned_word.strip())  # Append the stripped word to the list
+                self.result.kelurahan_atau_desa = ' '.join(desa).strip()  # Join the words and strip extra spaces
 
             if 'Kewarganegaraan' in word:
                 self.result.kewarganegaraan = word.split(':')[1].strip()
@@ -118,10 +120,11 @@ class KTPOCR(object):
                 wrod = word.split()
                 pekerjaan = []
                 for wr in wrod:
-                    if not '-' in wr:
-                        pekerjaan.append(wr)
-                self.result.pekerjaan = ' '.join(pekerjaan).replace('Pekerjaan', '').strip()
-
+                    # Clean the word by stripping unwanted leading characters
+                    cleaned_word = wr.lstrip(': ,')  # Strip leading ':', ' ', and ','
+                    if '-' not in cleaned_word:  # Ensure there's no '-' in the cleaned word
+                        pekerjaan.append(cleaned_word.strip())  # Append the stripped word to the list
+                self.result.pekerjaan = ' '.join(pekerjaan).replace('Pekerjaan','').strip()  # Join and strip extra spaces
             if 'Agama' in word:
                 # Remove the prefix 'Agama' and strip any extra spaces
                 agama_value = word.replace('Agama', "").strip() if word else ''
