@@ -64,23 +64,18 @@ class KTPOCR(object):
                 # Split the word at the colon and get the part after "Nama"
                 name_part = word.split(':')[-1].strip().replace('Nama', '')
 
-                # Initialize a list to hold name parts
+                # Initialize a list to hold the full name parts
                 name_parts = [name_part]
 
-                # Continue to the next lines until we find a line with identifiable fields
-                for next_word in extracted_result.split("\n"):
-                    # Break if we encounter a line that begins with known keywords for other fields
-                    if any(keyword in next_word for keyword in
-                           ['NIK', 'Tempat', 'Jenis kelamin', 'Gol. Darah', 'Alamat', 'Kecamatan', 'Agama', 'Status',
-                            'Pekerjaan', 'Kewarganegaraan', 'Berlaku']):
-                        break
+                # Get the index of the current word to continue processing from the next line
+                current_index = extracted_result.split("\n").index(word)
 
-                    # If we haven't broken out, check if it's part of the name (the first line after "Nama :")
-                    if next_word.strip() and not next_word.startswith(
-                            tuple(['NIK', 'Tempat', 'Jenis kelamin', 'Gol. Darah', 'Alamat', 'Kecamatan', 'Agama',
-                                   'Status', 'Pekerjaan', 'Kewarganegaraan', 'Berlaku'])):
-                        name_parts.append(next_word.strip())  # Add the name part if it doesn't belong to another field
-                        break  # We only want the first subsequent line for the name
+                # Check the next line directly after the current line
+                next_line = extracted_result.split("\n")[current_index + 1].strip()
+
+                # If the next line is not empty, add it to name_parts
+                if next_line:
+                    name_parts.append(next_line)
 
                 # Join all collected parts for the final name
                 self.result.nama = ' '.join(name_parts).strip()  # Combine the parts into a single name string
