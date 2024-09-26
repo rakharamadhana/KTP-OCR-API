@@ -28,35 +28,11 @@ def ocr():
     if img is None:
         return jsonify({'error': 'Unable to read the image'}), 400
 
-    # Process the image
-    final_results = read(img)
+    # Use the KTPOCR class for OCR processing
+    ocr = KTPOCR(img)
+    final_results = ocr.to_json()  # Assuming this method exists in KTPOCR
 
     return jsonify({'result': final_results})
 
-
-def read(image):
-    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-
-    # Threshold
-    th, threshed = cv2.threshold(gray, 127, 255, cv2.THRESH_TRUNC)
-
-    # Detect
-    result = pytesseract.image_to_string(threshed, lang="ind")
-
-    final = []
-
-    # Normalize
-    for word in result.split("\n"):
-        if "”—" in word:
-            word = word.replace("”—", ":")
-        if "NIK" in word:
-            nik_char = word.split()
-        if "?" in word:
-            word = word.replace("?", "7")
-        final.append(word)
-
-    return final
-
-
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)  # Change to your desired port
