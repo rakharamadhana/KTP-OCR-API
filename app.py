@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 import cv2
 import numpy as np
 from ktpocr import KTPOCR
+import json
 
 app = Flask(__name__)
 

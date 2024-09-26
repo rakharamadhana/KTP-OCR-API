@@ -1,6 +1,7 @@
 from collections import OrderedDict
 import json
 
+
 class KTPInformation(object):
     def __init__(self):
         self.nik = ""
