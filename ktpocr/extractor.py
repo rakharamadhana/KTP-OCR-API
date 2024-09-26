@@ -33,16 +33,22 @@ class KTPOCR(object):
         return res
 
     def nik_extract(self, word):
+        # Mapping of characters to their corresponding number replacements
         word_dict = {
             'b': "6",
             'e': "2",
+            '?': "7"
         }
+
         res = ""
         for letter in word:
-            if letter in word_dict:
-                res += word_dict[letter]
-            else:
+            # Check if the letter is numeric; if so, add it to the result
+            if letter.isdigit():
                 res += letter
+            else:
+                # Replace non-numeric letters with corresponding numbers from the dictionary
+                res += word_dict.get(letter, "")  # Default to "" to ignore if not found
+
         return res
 
     def extract(self, extracted_result):
