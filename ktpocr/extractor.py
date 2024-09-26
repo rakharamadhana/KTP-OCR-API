@@ -14,10 +14,12 @@ class KTPOCR(object):
         self.gray = cv2.cvtColor(self.image, cv2.COLOR_BGR2GRAY)
         self.th, self.threshed = cv2.threshold(self.gray, 127, 255, cv2.THRESH_TRUNC)
         self.result = KTPInformation()
+        self.raw_result = ""  # Initialize a variable to store raw OCR text
         self.master_process()
 
     def process(self, image):
         raw_extracted_text = pytesseract.image_to_string(self.threshed, lang="ind")
+        self.raw_result = raw_extracted_text  # Store the raw OCR text
         return raw_extracted_text
 
     def word_to_number_converter(self, word):
@@ -178,3 +180,6 @@ class KTPOCR(object):
 
     def to_json(self):
         return self.result.to_json()  # Ensure you're calling the KTPInformation's to_json method
+
+    def to_raw_result(self):
+        return self.raw_result  # Return the raw OCR result

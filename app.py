@@ -29,7 +29,11 @@ def ocr():
     try:
         ocr = KTPOCR(img)  # Create an instance of KTPOCR with the image
         ordered_dict = ocr.result.to_ordered_dict()  # Get the ordered dict
-        return jsonify(ordered_dict)  # Return the ordered dict as JSON
+        raw_result = ocr.to_raw_result()  # Get the raw OCR result
+        return jsonify({
+            'raw_result': raw_result,  # Return the raw OCR text
+            'parsed_result': ordered_dict  # Return the ordered dict as JSON
+        })
     except Exception as e:
         return jsonify({'error': str(e)}), 500  # Return the error message as JSON
 
